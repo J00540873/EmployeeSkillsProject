@@ -1,0 +1,43 @@
+<div class="container"> 
+    <form (submit) = onSubmit() #skillForm="ngForm">
+        <div class = "form-group">
+            <label for = "firstName"> {{ firstInput }}: </label>
+            <input type = "text" class = "form-control" id = "firstName"  [(ngModel)]= "firstName" name = "firstName">
+        </div>
+    
+        <div class = "form-group">
+            <label for = "lastName"> {{ secondInput }}: </label>
+            <input type = "text" class = "form-control" id = "lastName" [(ngModel)]= "lastName" name = "lastName">
+        </div>
+    
+        <div class = "form-group">
+            <label for = "skill"> {{ thirdInput }}: </label>
+            <input type = "text" class = "form-control" id = "skill" [(ngModel)]= "skill" name = "skill">
+        </div>
+    
+        <div class = "form-group">
+            <label for = "skillOptions"> {{ fourthInput }}: </label>
+            <select class = "form-control" id = "selecedSkill" [(ngModel)]= "selecedSkill" name = "selecedSkill">
+                <option *ngFor = "let skill of skillOptions" [value] = "skill" > {{ skill }} </option>
+            </select>
+        </div>
+<!--
+            <table style="width:100%" *ngIf = returnedList && returnedList.lenght >
+                <tr>
+                    <th> {{ firstInput }} </th>
+                    <th> {{ secondInput }} </th> 
+                    <th> {{ thirdInput }} </th>
+                </tr>
+                <tr>
+                    <td> returnedList.fistName </td>
+                    <td> returnedList.lastName</td> 
+                    <td> returnedList.skill </td>
+                </tr>
+            </table>
+-->
+        <div>
+            <button type = "submit" class = "btn btn-success"> Submit </button>
+        </div>
+        
+    </form>
+</div>

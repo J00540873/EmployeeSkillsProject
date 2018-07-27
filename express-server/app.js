@@ -1,7 +1,6 @@
 const Joi = require('joi');
 const express = require('express');
 const app = express();
-app.use(express.json());
 var pgp = require('pg-promise')(/*options*/)
 var cn = {
     host: 'localhost', // server name or IP address;
@@ -10,20 +9,28 @@ var cn = {
     user: '',
     password: ''
 };
+
+app.use(express.json());
+
 var db = pgp(cn)
 
 app.get('/employee/skills/api', (req, res) => {
     
-    var result = db.one('SELECT * FROM employee_skills').then( data => {
+    //Retrieve skills listed in database
+    var result = db.any('SELECT * FROM employee_skills').then( data => {
         return data;
     })// print the error;
     .catch(error => {
-        console.log(error); 
+        
     });
 
-    result.then(function(result){
+    //returns promise
+    result.then((result) => {
         res.send(result)
+        console.log(result)
     })
+
+    
 })
 
 //Post an employer in the database
@@ -33,22 +40,23 @@ app.post('/employee/skills/api', (req, res) => {
     if (error) return res.status(400).send(error.details[0].message); 
 
     const data = {
-            first_name : res.body.firstName,
-            last_name : res.body.lastName,
-            skill     : res.body.skill
+            first_name : res.body.firstName.toLowerCase(),
+            last_name  : res.body.lastName.toLowerCase(),
+            skill      : res.body.skill.toLowerCase()
     }
     //Inserts record into DB
-    const insert = db.one('INSERT INTO employee_skill(first_name, last_name, skill) \
+    const insert = db.none('INSERT INTO employee_skill(first_name, last_name, skill) \
     values('+ data.first_name +',' + data.last_name +','+ data.skill +');');
     
 	//Return object on successful insertion
-    var result = db.one('SELECT * FROM employee_skill WHERE first_name = '+ data.first_name + ' AND \
+    var result = db.any('SELECT * FROM employee_skill WHERE first_name = '+ data.first_name + ' AND \
     last_name = ' + data.last_name + ' AND skill = ' + data.skill + ' ORDER BY id ASC LIMIT 1;').then( data => {
         return data;
     })// print the error;
     .catch(error => {
-        console.log(error); 
+       
     });
+
     //returns promise
     result.then(function(result){
         res.send(result)
@@ -58,34 +66,40 @@ app.post('/employee/skills/api', (req, res) => {
 //Returns all skill set capture in database
 app.get('/employee/skills/api/listofskills', (req, res) => {
     
-    var result = db.one('SELECT skill FROM employee_skills').then( data => {
+    //Retrieve skills listed in database
+    var result = db.any('SELECT skill FROM employee_skills').then( data => {
         return data;
-    })// print the error;
+    }) //catch error
     .catch(error => {
-        console.log(error); 
+        
     });
+
     //returns promise
     result.then(function(result){
         console.log(result);
+        console.log(result.length);
         res.send(result)
     })
 })
 
 //Returns a list of employees based on the enter skill
 app.get('/employee/byskills/api/:skill', (req, res) => {
-    //search db for entry
-    const data = { skill : req.param.skill}
+    
+    const data = { skill : req.params.skill}
 
-    var result = db.one('SELECT * FROM employee_skill WHERE skill = ' + data.skill + ' ORDER BY first_name ASC;').then( data => {
+    //Retrieve selected skill
+    var result = db.any('SELECT * FROM employee_skills WHERE skill = ($1);', [data.skill]).then( data => {
+        console.log(data);
         return data;
-    })// print the error;
+    }) //catch error
     .catch(error => {
-        return res.send(404).send("The selected skill does not exist");
+        
     });
+
     //returns promise
-    result.then(function(result){
-        if( !result ) return res.send(404).send("The selected skill does not exist");
+    result.then((result) => {
         res.send(result)
+        
     })
     
 })
