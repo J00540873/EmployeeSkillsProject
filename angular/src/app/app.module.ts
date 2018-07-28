@@ -4,12 +4,12 @@ import { FormsModule} from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { EmployeeSkillComponent} from './employee-skill-form/employee-skill.component'
-import { EmployeeSkillService } from './services/employee-skill.service'
+import { EmployeeComponent} from './employee/employee.component'
+import { EmployeeService } from './services/employee.service'
 
 @NgModule({
   declarations: [
-    EmployeeSkillComponent,
+    EmployeeComponent,
     AppComponent
   ],
   imports: [
@@ -17,7 +17,7 @@ import { EmployeeSkillService } from './services/employee-skill.service'
     BrowserModule,
     FormsModule
   ],
-  providers: [],
+  providers: [EmployeeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

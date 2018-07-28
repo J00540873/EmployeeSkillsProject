@@ -1,5 +1,5 @@
 <div class="container"> 
-    <form (submit) = onSubmit() #skillForm="ngForm">
+    <form (submit) = onSubmit() #employeeForm="ngForm">
         <div class = "form-group">
             <label for = "firstName"> {{ firstInput }}: </label>
             <input type = "text" class = "form-control" id = "firstName"  [(ngModel)]= "firstName" name = "firstName">
@@ -21,7 +21,7 @@
                 <option *ngFor = "let skill of skillOptions" [value] = "skill" > {{ skill }} </option>
             </select>
         </div>
-<!--
+
             <table style="width:100%" *ngIf = returnedList && returnedList.lenght >
                 <tr>
                     <th> {{ firstInput }} </th>
@@ -34,7 +34,7 @@
                     <td> returnedList.skill </td>
                 </tr>
             </table>
--->
+ 
         <div>
             <button type = "submit" class = "btn btn-success"> Submit </button>
         </div>

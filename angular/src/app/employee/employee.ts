@@ -1,4 +1,4 @@
-export interface IEmployeeSkill{
+export interface IEmployee{
     firstName: string;
     lastName: string;
     skill: string;
